@@ -8,9 +8,9 @@ arguments
     windowSize (1,1) double {mustBeInteger, mustBePositive}
 end
 
-y = zeros(size(x));
-for k = 1:numel(x)
-    first = max(1, k - windowSize + 1);
-    y(k) = mean(x(first:k));
-end
+% Vectorized with a cumulative sum instead of a loop.
+c = cumsum([0; x]);
+k = (1:numel(x))';
+first = max(1, k - windowSize);
+y = (c(k+1) - c(first)) ./ (k - first + 1);
 end
